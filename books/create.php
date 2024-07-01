@@ -1,25 +1,34 @@
-<?php include '../components/header.php'; ?>
-<?php include '../config/database.php'; ?>
-
-<div class="container mt-5">
+<?php include '../components/header.php'; ?> 
+<?php include '../config/database.php'; ?> 
+<div class="container mt-5"> 
     <?php
     if (isset($_POST['submit'])) {
+        // Mengecek apakah form telah disubmit
+
         $title = $_POST['title'];
         $author = $_POST['author'];
         $published_year = $_POST['published_year'];
+        // Mengambil data yang diinputkan user dari form
 
         $sql = "INSERT INTO buku (title, author, published_year) VALUES ('$title', '$author', '$published_year')";
+        // Membuat query SQL untuk menambahkan data buku ke dalam tabel buku
 
         if ($conn->query($sql) === TRUE) {
+            // Mengeksekusi query dan mengecek apakah berhasil
+            
             echo '<div id="alert" class="alert alert-success mt-4">Buku baru berhasil ditambahkan</div>';
+            // Menampilkan pesan sukses
+
             echo '<script>
                     setTimeout(function() {
                         document.getElementById("alert").style.display = "none";
                         window.location.href = "/Uas-Praktikum-Web/index.php";
-                    }, 1000); // Hide alert after 2 seconds and redirect
+                    }, 1000);
                   </script>';
+            // Menyembunyikan pesan sukses setelah 2 detik dan mengalihkan ke halaman index.php
         } else {
             echo '<div class="alert alert-danger mt-4">Error: ' . $sql . '<br>' . $conn->error . '</div>';
+            // Menampilkan pesan error jika query gagal
         }
     }
     ?>
