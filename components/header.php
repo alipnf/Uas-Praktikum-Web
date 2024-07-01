@@ -34,13 +34,13 @@ if (session_status() == PHP_SESSION_NONE) {
                                 <a class="btn btn-danger" href="/Uas-Praktikum-Web/auth/logout.php">Logout</a>
                             </li>
                         </ul>
-                    <?php else: ?>
+                    <!-- <?php else: ?>
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="/Uas-Praktikum-Web/auth/login.php">Login</a>
                             </li>
                         </ul>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
                 </div>
             </div>
         </nav>
