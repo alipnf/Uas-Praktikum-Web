@@ -1,7 +1,7 @@
 <?php
-session_start();
-session_unset();
-session_destroy();
-header("Location: login.php");
-exit();
+session_start(); // Memulai sesi
+session_unset(); // Menghapus semua variabel sesi
+session_destroy(); // Menghancurkan sesi
+header("Location: login.php"); // Mengarahkan pengguna ke halaman login
+exit(); // Menghentikan eksekusi skrip
 ?>

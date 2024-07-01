@@ -1,4 +1,5 @@
-<?php include '../config/database.php'; ?>
+<?php include '../config/database.php'; ?> <!-- Menghubungkan ke file konfigurasi database -->
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -45,24 +46,25 @@
                 </div>
 
                 <?php
-                if (isset($_POST['submit']) && isset($_POST['form_type']) && $_POST['form_type'] == 'login') {
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
+                if (isset($_POST['submit']) && isset($_POST['form_type']) && $_POST['form_type'] == 'login') { 
+                    // Mengecek apakah form login telah disubmit
+                    $username = $_POST['username']; // Mengambil data username dari form
+                    $password = $_POST['password']; // Mengambil data password dari form
 
-                    $sql = "SELECT * FROM user WHERE username='$username'";
-                    $result = $conn->query($sql);
+                    $sql = "SELECT * FROM user WHERE username='$username'"; // Query untuk mengambil data user berdasarkan username
+                    $result = $conn->query($sql); // Menjalankan query
 
-                    if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-                        if (password_verify($password, $row['password'])) {
-                            $_SESSION['user_id'] = $row['id'];
-                            $_SESSION['username'] = $row['username'];
-                            header("Location: ../index.php");
+                    if ($result->num_rows > 0) { // Mengecek apakah username ditemukan
+                        $row = $result->fetch_assoc(); // Mengambil data user
+                        if (password_verify($password, $row['password'])) { // Mengecek apakah password sesuai
+                            $_SESSION['user_id'] = $row['id']; // Menyimpan user_id ke session
+                            $_SESSION['username'] = $row['username']; // Menyimpan username ke session
+                            header("Location: ../index.php"); // Mengarahkan ke halaman index
                         } else {
-                            echo '<div class="alert alert-danger mt-3">password salah</div>';
+                            echo '<div class="alert alert-danger mt-3">Password salah</div>'; // Menampilkan pesan kesalahan jika password salah
                         }
                     } else {
-                        echo '<div class="alert alert-danger mt-3">tidak ditemukan user</div>';
+                        echo '<div class="alert alert-danger mt-3">Tidak ditemukan user dengan username tersebut</div>'; // Menampilkan pesan kesalahan jika username tidak ditemukan
                     }
                 }
                 ?>
@@ -96,15 +98,16 @@
 
                 <?php
                 if (isset($_POST['submit']) && isset($_POST['form_type']) && $_POST['form_type'] == 'register') {
-                    $username = $_POST['username'];
-                    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+                    // Mengecek apakah form register telah disubmit
+                    $username = $_POST['username']; // Mengambil data username dari form
+                    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Mengambil data password dari form dan melakukan hash
 
-                    $sql = "INSERT INTO user (username, password) VALUES ('$username', '$password')";
+                    $sql = "INSERT INTO user (username, password) VALUES ('$username', '$password')"; // Query untuk memasukkan data user baru
 
                     if ($conn->query($sql) === TRUE) {
-                        echo '<div class="alert alert-success mt-3">User registered successfully</div>';
+                        echo '<div class="alert alert-success mt-3">User berhasil terdaftar</div>'; // Menampilkan pesan sukses jika user berhasil terdaftar
                     } else {
-                        echo '<div class="alert alert-danger mt-3">Error: ' . $sql . '<br>' . $conn->error . '</div>';
+                        echo '<div class="alert alert-danger mt-3">Error: ' . $sql . '<br>' . $conn->error . '</div>'; // Menampilkan pesan kesalahan jika terjadi error
                     }
                 }
                 ?>
@@ -113,7 +116,7 @@
     </div>
 </div>
 
-<?php include '../components/footer.php'; ?>
+<?php include '../components/footer.php'; ?> <!-- Menyertakan footer -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
   (function () {
@@ -147,4 +150,4 @@
 </script>
 </body>
 </html>
-<?php $conn->close(); ?>
+<?php $conn->close(); ?> <!-- Menutup koneksi database -->

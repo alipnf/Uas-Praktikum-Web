@@ -1,8 +1,10 @@
 <?php
+// Memulai session jika belum dimulai
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Mengecek apakah pengguna sudah login, jika belum maka diarahkan ke halaman login
 if (!isset($_SESSION['username'])) {
     header("Location: auth/login.php");
     exit;
@@ -17,12 +19,15 @@ include 'config/database.php';
     <div id="alert-container"></div>
     <a href="books/create.php" class="btn btn-primary mb-3">Tambah Buku</a>
     <?php
+    // Query untuk mengambil semua data buku
     $sql = "SELECT * FROM buku";
     $result = $conn->query($sql);
 
+    // Mengecek apakah ada data buku yang ditemukan
     if ($result->num_rows > 0) {
         echo '<table class="table">';
         echo '<thead><tr><th>ID</th><th>Judul</th><th>Penulis</th><th>Tahun Terbit</th><th>Aksi</th></tr></thead><tbody>';
+        // Menampilkan setiap baris data buku
         while ($row = $result->fetch_assoc()) {
             echo '<tr>';
             echo '<td>' . $row["id"] . '</td>';
@@ -39,11 +44,11 @@ include 'config/database.php';
     } else {
         echo '<div class="alert alert-info">Tidak ada hasil</div>';
     }
-    $conn->close();
+    $conn->close();  // Menutup koneksi database
     ?>
 </div>
 
-<!-- Modal -->
+<!-- Modal untuk konfirmasi hapus buku -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -71,24 +76,26 @@ include 'config/database.php';
 $(document).ready(function() {
     var bookId;
 
+    // Ketika tombol hapus buku diklik
     $('.delete-book').click(function() {
-        bookId = $(this).data('id');
-        $('#deleteModal').modal('show');
+        bookId = $(this).data('id');  // Mendapatkan ID buku dari atribut data-id
+        $('#deleteModal').modal('show');  // Menampilkan modal konfirmasi
     });
 
+    // Ketika tombol konfirmasi hapus pada modal diklik
     $('#confirmDelete').click(function() {
         $.ajax({
-            url: 'books/delete.php',
+            url: 'books/delete.php',  // URL untuk menghapus buku
             type: 'GET',
-            data: { id: bookId },
+            data: { id: bookId },  // Mengirimkan ID buku sebagai parameter
             success: function(response) {
-                $('#deleteModal').modal('hide');
-                $('#alert-container').html(response);
-                $('button[data-id="' + bookId + '"]').closest('tr').remove();
+                $('#deleteModal').modal('hide');  // Menyembunyikan modal
+                $('#alert-container').html(response);  // Menampilkan respon dari server
+                $('button[data-id="' + bookId + '"]').closest('tr').remove();  // Menghapus baris buku dari tabel
             },
             error: function(xhr, status, error) {
-                $('#deleteModal').modal('hide');
-                $('#alert-container').html('<div class="alert alert-danger">Terjadi kesalahan: ' + error + '</div>');
+                $('#deleteModal').modal('hide');  // Menyembunyikan modal
+                $('#alert-container').html('<div class="alert alert-danger">Terjadi kesalahan: ' + error + '</div>');  // Menampilkan pesan error
             }
         });
     });
